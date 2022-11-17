@@ -24,13 +24,16 @@ export default {
 
     <ul v-if="store.results">
         <!-- <li v-for="movie in store.movies"> -->
-        <li v-for="movie in store.results.results">
+        <li v-for="(movie, i) in store.results.results">
             <div class="movieSearch" v-if="movie.media_type == 'movie'">
                 <img :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
                 {{ movie.title }}
                 {{ movie.original_title }}
                 <img :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
                 {{ movie.vote_average }}
+                <font-awesome-icon icon="fa-solid fa-star" v-for="star in store.vote_average" />
+                <font-awesome-icon icon="fa-regular fa-star" />
+                <!-- <font-awesome-icon icon="fa-solid fa-star-half" /> -->
             </div>
             <div class="tvShow" v-else>
                 <img :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
@@ -38,7 +41,13 @@ export default {
                 {{ movie.original_title }}
                 <img :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
                 {{ movie.vote_average }}
+
+                <font-awesome-icon icon="fa-solid fa-star" v-for="star in store.vote_average" />
+
+                <!-- <font-awesome-icon icon="fa-solid fa-star-half" /> -->
+                <font-awesome-icon icon="fa-regular fa-star" />
             </div>
+
         </li>
     </ul>
 
