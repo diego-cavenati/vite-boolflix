@@ -26,12 +26,14 @@ export default {
         <!-- <li v-for="movie in store.movies"> -->
         <li v-for="movie in store.results.results">
             <div class="movieSearch" v-if="movie.media_type == 'movie'">
+                <img :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
                 {{ movie.title }}
                 {{ movie.original_title }}
                 <img :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
                 {{ movie.vote_average }}
             </div>
             <div class="tvShow" v-else>
+                <img :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
                 {{ movie.name }}
                 {{ movie.original_title }}
                 <img :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">

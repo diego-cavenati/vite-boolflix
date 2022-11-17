@@ -25,7 +25,6 @@ export const store = reactive({
     callApi() {
         axios(store.config)
             .then(response => {
-                // this.store.movies = response.data.results;
                 store.results = response.data;
                 store.loading = false;
                 store.config.params.query = '';
@@ -41,8 +40,6 @@ export const store = reactive({
                     }
                 });
                 console.log(element.original_language);
-
-
 
 
             })
