@@ -11,9 +11,16 @@ export default {
 </script>
 
 <template>
-    <ul>
-        <li v-for="movie in store.movies">
+
+    <ul v-if="store.results">
+        <!-- <li v-for="movie in store.movies"> -->
+        <li v-for="movie in store.results.results">
             {{ movie.title }}
+            {{ movie.original_title }}
+            {{ movie.original_language }}
+            {{ movie.vote_average }}
+
         </li>
     </ul>
+
 </template>
