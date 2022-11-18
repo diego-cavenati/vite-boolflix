@@ -5,7 +5,6 @@ export default {
     data() {
         return {
             store,
-            hover: false,
             ActiveIndex: 0,
         }
     },
@@ -31,8 +30,14 @@ export default {
             return this.numeroStelle = store.vote_average[i]
         },
         halfNumber(el) {
+            if (isNaN(el)) {
+                return 0;
+            }
             return parseInt(el / 2)
         },
+        emptyStar(element) {
+            return 5 - element;
+        }
     }
 }
 </script>
@@ -42,11 +47,10 @@ export default {
     <div class="showResults" v-if="store.results">
 
         <h2>Film</h2>
-        <div class="movie" v-for="(movie, i) in store.results.results" @mouseover="hover = true"
-            @mouseleave="hover = false" v-show="store.type[i] == 'movie'">
+        <div class="movie" v-for="(movie, i) in store.results.results" v-show="store.type[i] == 'movie'">
             <div class="movieSearch">
                 <img class="poster" :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
-                <div class="infoMovie" v-if="hover">
+                <div class="infoMovie">
                     <div class="shade"></div>
                     <img class="language" :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
                     <div class="description">
@@ -55,7 +59,6 @@ export default {
                         </div>
                         <div class="originalTitle" v-else>
                             {{ movie.original_title }}
-                            {{ this.halfNumber(movie.vote_average) }}
                         </div>
                         <div class="star">
                             <div class="full">
@@ -63,10 +66,13 @@ export default {
                                     v-for="star in this.halfNumber(movie.vote_average)" />
                             </div>
                             <div class="empty">
-                                <font-awesome-icon icon="fa-regular fa-star" />
+                                <font-awesome-icon icon="fa-regular fa-star"
+                                    v-for="emptyStar in this.emptyStar(this.halfNumber(movie.vote_average))" />
                             </div>
                         </div>
-
+                        <div class="overview">
+                            {{ movie.overview }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,11 +80,10 @@ export default {
 
 
         <h2>Serie TV</h2>
-        <div class="tvShow" v-for="(movie, i) in store.results.results" @mouseover="hover = true"
-            @mouseleave="hover = false" v-show="store.type[i] == 'tv'">
+        <div class="tvShow" v-for="(movie, i) in store.results.results" v-show="store.type[i] == 'tv'">
             <div class="movieSearch">
                 <img class="poster" :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
-                <div class="infoMovie" v-if="hover">
+                <div class="infoMovie">
                     <div class="shade"></div>
                     <img class="language" :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
                     <div class="description">
@@ -90,11 +95,16 @@ export default {
                         </div>
                         <div class="star">
                             <div class="full">
-                                <font-awesome-icon icon="fa-solid fa-star" v-for="star in 1" />
+                                <font-awesome-icon icon="fa-solid fa-star"
+                                    v-for="star in this.halfNumber(movie.vote_average)" />
                             </div>
                             <div class="empty">
-                                <font-awesome-icon icon="fa-regular fa-star" />
+                                <font-awesome-icon icon="fa-regular fa-star"
+                                    v-for="emptyStar in this.emptyStar(this.halfNumber(movie.vote_average))" />
                             </div>
+                        </div>
+                        <div class="overview">
+                            {{ movie.overview }}
                         </div>
                     </div>
                 </div>
@@ -133,6 +143,10 @@ h2 {
     align-items: center;
     display: flex;
 
+    &:hover .infoMovie {
+        display: block;
+    }
+
     .movieSearch {
         position: relative;
         width: 100%;
@@ -156,9 +170,24 @@ h2 {
     }
 }
 
+.star {
+    display: flex;
+}
+
+.description {
+    width: 100%;
+    padding: 1.4rem;
+}
 
 .infoMovie {
     z-index: 999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s linear 0.05s;
+
+    &:hover {
+        opacity: 1;
+    }
 
     .shade {
         z-index: 99;
@@ -168,7 +197,8 @@ h2 {
         height: 100%;
         width: 100%;
         background-color: black;
-        opacity: 0.5
+        opacity: 0.7;
+
     }
 
     .language {
@@ -182,13 +212,14 @@ h2 {
     .description {
         z-index: 999;
         position: absolute;
-        bottom: 2rem;
-        left: 0.8rem;
+        bottom: 1rem;
+        left: 0rem;
         color: white;
 
         .originalTitle,
         .movieTitle {
             font-size: 1.5rem;
+            font-weight: 700;
             text-transform: uppercase;
             color: white;
         }
