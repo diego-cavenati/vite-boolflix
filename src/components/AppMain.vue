@@ -6,6 +6,7 @@ export default {
         return {
             store,
             hover: false,
+            index: 0,
         }
     },
     methods: {
@@ -17,14 +18,17 @@ export default {
         //         return store.original_language
         //     }
         // }
-        is_a_flag(lang) {
-            if (this.flags.includes(lang_code)) {
-                return true
-            }
-            return false
-        },
-        generateFlag(lang_code) {
-            return new URL(`../../assets/images/${lang_code}.srg`)
+        // is_a_flag(lang) {
+        //     if (this.flags.includes(lang_code)) {
+        //         return true
+        //     }
+        //     return false
+        // },
+        // generateFlag(lang_code) {
+        //     return new URL(`../../assets/images/${lang_code}.srg`)
+        // }
+        voteAverage(i) {
+            return this.numeroStelle = store.vote_average[i]
         }
     }
 }
@@ -32,46 +36,67 @@ export default {
 
 <template>
 
-    <div class="container-fluid showResults" v-if="store.results">
+    <div class="showResults" v-if="store.results">
 
         <h2>Film</h2>
         <div class="movie" v-for="(movie, i) in store.results.results" @mouseover="hover = true"
             @mouseleave="hover = false" v-show="store.type[i] == 'movie'">
-
-            <div class=" movieSearch">
+            <div class="movieSearch">
                 <img class="poster" :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
                 <div class="infoMovie" v-if="hover">
+                    <div class="shade"></div>
                     <img class="language" :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
-                    <div class="movieTitle" v-if="movie.title != movie.original_title">
-                        {{ movie.title }}
+                    <div class="description">
+                        <div class="movieTitle" v-if="movie.title != movie.original_title">
+                            {{ movie.title }}
+                        </div>
+                        <div class="originalTitle" v-else>
+                            {{ movie.original_title }}
+                        </div>
+                        <div class="star">
+                            <div class="full">
+                                <font-awesome-icon icon="fa-solid fa-star" v-for="star in 1" />
+                            </div>
+                            <div class="empty">
+                                <font-awesome-icon icon="fa-regular fa-star" />
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="originalTitle" v-else>
-                        {{ movie.original_title }}
-                    </div>
-                    <!-- <font-awesome-icon icon="fa-solid fa-star" v-for="star in store.vote_average" />
-                    <font-awesome-icon icon="fa-regular fa-star" /> -->
                 </div>
             </div>
         </div>
-    </div>
 
-    <h2>Serie TV</h2>
-    <div class="tvShow" v-for="(movie, i) in store.results.results" @mouseover="hover = true"
-        @mouseleave="hover = false" v-show="store.type[i] == 'tv'">
 
-        <div class="tvShowSearch">
-            <img :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
-            <div class="infoMovie" v-if="hover">
-                <img class="language" :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
-                {{ movie.name }}
-                {{ movie.original_title }}
-                <!-- <font-awesome-icon icon="fa-solid fa-star" v-for="star in store.vote_average" />
-                <font-awesome-icon icon="fa-regular fa-star" /> -->
+        <h2>Serie TV</h2>
+        <div class="tvShow" v-for="(movie, i) in store.results.results" @mouseover="hover = true"
+            @mouseleave="hover = false" v-show="store.type[i] == 'tv'">
+            <div class="movieSearch">
+                <img class="poster" :src="`https://image.tmdb.org/t/p/w342/${movie.poster_path}`" alt="">
+                <div class="infoMovie" v-if="hover">
+                    <div class="shade"></div>
+                    <img class="language" :src="`https://countryflagsapi.com/png/${movie.original_language}`" alt="">
+                    <div class="description">
+                        <div class="movieTitle" v-if="movie.title != movie.original_title">
+                            {{ movie.name }}
+                        </div>
+                        <div class="originalTitle" v-else>
+                            {{ movie.original_name }}
+                        </div>
+                        <div class="star">
+                            <div class="full">
+                                <font-awesome-icon icon="fa-solid fa-star" v-for="star in 1" />
+                            </div>
+                            <div class="empty">
+                                <font-awesome-icon icon="fa-regular fa-star" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
-
     </div>
-
 
 </template>
 
@@ -81,6 +106,7 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 h2 {
@@ -89,42 +115,78 @@ h2 {
     width: 100%;
     font-size: 2.5rem;
     padding-bottom: 0.8rem;
+    padding-top: 1rem;
 }
 
-.movie {
+.movie,
+.tvShow {
     width: 20%;
     position: relative;
+    // border: 2px solid red;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 
     .movieSearch {
-        .originalTitle {
-            font-size: 1.3rem;
-        }
-
-        .poster {
-
-            img {
-                max-width: 100%;
-                object-fit: cover;
-            }
-        }
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
-.tvShow {
-    display: flex;
+.originalTitle {
+    font-size: 1.3rem;
 }
 
+.poster {
+    width: 100%;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+
 .infoMovie {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
     z-index: 999;
 
-    .language {
+    .shade {
+        z-index: 99;
         position: absolute;
+        left: 0;
         top: 0;
-        right: 0;
+        height: 100%;
+        width: 100%;
+        background-color: black;
+        opacity: 0.5
+    }
+
+    .language {
+        z-index: 999;
+        position: absolute;
+        top: 0.6rem;
+        right: 0.8rem;
         max-width: 10%;
+    }
+
+    .description {
+        z-index: 999;
+        position: absolute;
+        bottom: 2rem;
+        left: 0.8rem;
+        color: white;
+
+        .originalTitle,
+        .movieTitle {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            color: white;
+        }
     }
 }
 </style>
