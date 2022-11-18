@@ -1,3 +1,12 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #777;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(57, 57, 57, 1) 39%, rgba(0, 0, 0, 1) 100%);
+    color: white;
+    min-height: 100vh;
 }

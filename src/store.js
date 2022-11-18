@@ -10,6 +10,7 @@ export const store = reactive({
     poster_path: null,
     title: null,
     vote_average: [],
+    type: [],
     errorMessage: null,
 
     config: {
@@ -30,23 +31,24 @@ export const store = reactive({
                 store.config.params.query = '';
 
                 response.data.results.forEach(element => {
-                    // console.log(element);
                     if (element.original_language != null) {
                         if (element.original_language == 'en') {
                             element.original_language = 'gb'
                         }
                         return element.original_language
                     }
+
                 });
 
                 response.data.results.forEach(element => {
-                    console.log(parseInt(element.vote_average / 2));
                     store.vote_average.push(parseInt(element.vote_average / 2))
-                    // store.vote_average.push(String(parseInt(element.vote_average / 2)));
-
-                    // console.log(store.vote_average.push(String(parseInt(element.vote_average / 2))));
                 });
-                console.log(store.vote_average);
+
+                response.data.results.forEach(element => {
+                    console.log(element.media_type);
+                    store.type.push(element.media_type)
+                });
+                console.log(store.type)
 
 
             })
