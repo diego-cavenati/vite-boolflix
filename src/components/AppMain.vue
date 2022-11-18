@@ -6,7 +6,7 @@ export default {
         return {
             store,
             hover: false,
-            index: 0,
+            ActiveIndex: 0,
         }
     },
     methods: {
@@ -29,7 +29,10 @@ export default {
         // }
         voteAverage(i) {
             return this.numeroStelle = store.vote_average[i]
-        }
+        },
+        halfNumber(el) {
+            return parseInt(el / 2)
+        },
     }
 }
 </script>
@@ -52,10 +55,12 @@ export default {
                         </div>
                         <div class="originalTitle" v-else>
                             {{ movie.original_title }}
+                            {{ this.halfNumber(movie.vote_average) }}
                         </div>
                         <div class="star">
                             <div class="full">
-                                <font-awesome-icon icon="fa-solid fa-star" v-for="star in 1" />
+                                <font-awesome-icon icon="fa-solid fa-star"
+                                    v-for="star in this.halfNumber(movie.vote_average)" />
                             </div>
                             <div class="empty">
                                 <font-awesome-icon icon="fa-regular fa-star" />
